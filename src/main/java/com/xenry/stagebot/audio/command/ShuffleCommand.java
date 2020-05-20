@@ -1,6 +1,7 @@
 package com.xenry.stagebot.audio.command;
 import com.xenry.stagebot.audio.AudioHandler;
 import com.xenry.stagebot.audio.AudioInstance;
+import com.xenry.stagebot.audio.IAudioInstance;
 import com.xenry.stagebot.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,12 +25,18 @@ public class ShuffleCommand extends AudioCommand {
 	protected void perform(User user, Message message, String[] args, String label) {
 		MessageChannel messageChannel = message.getChannel();
 		Guild guild = message.getGuild();
-		AudioInstance instance = handler.getInstance(guild);
+		IAudioInstance instance = handler.getInstance(guild);
 		if(instance == null || !instance.isConnected()){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm not connected right now.");
 			return;
 		}
-		instance.shuffleQueue();
+		
+		if(!(instance instanceof AudioInstance)){
+			MessageUtil.sendMessage(messageChannel, ":x: You can't use this command right now.");
+			return;
+		}
+		
+		((AudioInstance)instance).shuffleQueue();
 		MessageUtil.sendMessage(messageChannel, ":white_check_mark: Shuffled queue.");
 	}
 	

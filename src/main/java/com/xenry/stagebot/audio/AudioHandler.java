@@ -21,7 +21,7 @@ public final class AudioHandler {
 	
 	public final StageBot stageBot;
 	public final AudioPlayerManager manager;
-	private final HashMap<Guild,AudioInstance> instances;
+	private final HashMap<Guild,IAudioInstance> instances;
 	
 	public AudioHandler(StageBot stageBot){
 		this.stageBot = stageBot;
@@ -29,7 +29,6 @@ public final class AudioHandler {
 		manager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(manager);
 		
-		//stageBot.getCommandHandler().register(new TestAudioCommand(this));
 		stageBot.getCommandHandler().register(new ConnectCommand(this));
 		stageBot.getCommandHandler().register(new DisconnectCommand(this));
 		stageBot.getCommandHandler().register(new PlayCommand(this));
@@ -39,27 +38,28 @@ public final class AudioHandler {
 		stageBot.getCommandHandler().register(new ShuffleCommand(this));
 		stageBot.getCommandHandler().register(new NowPlayingCommand(this));
 		stageBot.getCommandHandler().register(new QueueCommand(this));
+		stageBot.getCommandHandler().register(new SeekCommand(this));
 	}
 	
-	public HashMap<Guild,AudioInstance> getInstances() {
+	public HashMap<Guild,IAudioInstance> getInstances() {
 		return instances;
 	}
 	
-	public AudioInstance getInstance(Guild guild){
+	public IAudioInstance getInstance(Guild guild){
 		return instances.getOrDefault(guild, null);
 	}
 	
-	public AudioInstance createInstance(Guild guild, MessageChannel messageChannel, VoiceChannel voiceChannel){
+	public IAudioInstance createInstance(Guild guild, MessageChannel messageChannel, VoiceChannel voiceChannel){
 		if(instances.containsKey(guild)){
 			throw new IllegalArgumentException("An instance already exists for guild: " + guild.getName());
 		}
-		AudioInstance instance = new AudioInstance(this, messageChannel, voiceChannel);
+		IAudioInstance instance = new AudioInstance(this, messageChannel, voiceChannel);
 		instances.put(guild, instance);
 		return instance;
 	}
 	
 	public void destroyInstance(Guild guild){
-		AudioInstance instance = getInstance(guild);
+		IAudioInstance instance = getInstance(guild);
 		if(instance == null){
 			return;
 		}

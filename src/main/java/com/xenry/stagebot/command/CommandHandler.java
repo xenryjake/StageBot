@@ -22,7 +22,7 @@ import java.util.List;
  */
 public final class CommandHandler extends ListenerAdapter {
 	
-	private static final String prefix = ";";
+	public static final String PREFIX = ";";
 	
 	private final StageBot stageBot;
 	protected final List<Command> commands;
@@ -41,11 +41,11 @@ public final class CommandHandler extends ListenerAdapter {
 		
 		Message message = event.getMessage();
 		String content = message.getContentRaw();
-		if(!content.startsWith(prefix)){
+		if(!content.startsWith(PREFIX)){
 			return;
 		}
 		
-		String[] split = content.substring(prefix.length()).split(" ");
+		String[] split = content.substring(PREFIX.length()).split(" ");
 		if(split.length < 1){
 			return;
 		}
@@ -69,7 +69,7 @@ public final class CommandHandler extends ListenerAdapter {
 				}catch(PermissionException px){
 					Log.warning("Couldn't send message in channel: " + channel.getName());
 				}
-				Log.warning("Failed to process command: " + prefix + label);
+				Log.warning("Failed to process command: " + PREFIX + label);
 				ex.printStackTrace();
 			}
 		}

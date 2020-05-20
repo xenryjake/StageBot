@@ -1,6 +1,7 @@
 package com.xenry.stagebot.audio.command;
 import com.xenry.stagebot.audio.AudioHandler;
 import com.xenry.stagebot.audio.AudioInstance;
+import com.xenry.stagebot.audio.IAudioInstance;
 import com.xenry.stagebot.util.MessageUtil;
 import net.dv8tion.jda.api.entities.*;
 
@@ -35,7 +36,7 @@ public class ConnectCommand extends AudioCommand {
 			return;
 		}
 		
-		AudioInstance instance = handler.getInstance(message.getGuild());
+		IAudioInstance instance = handler.getInstance(message.getGuild());
 		if(instance == null){
 			instance = handler.createInstance(message.getGuild(), messageChannel, voiceChannel);
 		}

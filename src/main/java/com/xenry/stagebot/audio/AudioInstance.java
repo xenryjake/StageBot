@@ -24,7 +24,7 @@ import java.util.List;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class AudioInstance extends AudioEventAdapter {
+public class AudioInstance extends AudioEventAdapter implements IAudioInstance {
 	
 	private final MessageChannel messageChannel;
 	private final VoiceChannel voiceChannel;
@@ -32,7 +32,7 @@ public class AudioInstance extends AudioEventAdapter {
 	private final AudioPlayer player;
 	private final ArrayList<AudioTrack> queue;
 	
-	AudioInstance(AudioHandler handler, MessageChannel messageChannel, VoiceChannel voiceChannel) {
+	public AudioInstance(AudioHandler handler, MessageChannel messageChannel, VoiceChannel voiceChannel) {
 		this.handler = handler;
 		this.messageChannel = messageChannel;
 		this.voiceChannel = voiceChannel;
@@ -43,6 +43,7 @@ public class AudioInstance extends AudioEventAdapter {
 		player.addListener(this);
 	}
 	
+	@Override
 	public boolean connect(){
 		AudioManager audioManager = voiceChannel.getGuild().getAudioManager();
 		try{
@@ -54,22 +55,27 @@ public class AudioInstance extends AudioEventAdapter {
 		return true;
 	}
 	
+	@Override
 	public void disconnect(){
 		voiceChannel.getGuild().getAudioManager().closeAudioConnection();
 	}
 	
+	@Override
 	public boolean isConnected(){
 		return voiceChannel.getGuild().getAudioManager().isConnected();
 	}
 	
+	@Override
 	public MessageChannel getMessageChannel() {
 		return messageChannel;
 	}
 	
+	@Override
 	public VoiceChannel getVoiceChannel() {
 		return voiceChannel;
 	}
 	
+	@Override
 	public AudioPlayer getPlayer() {
 		return player;
 	}
@@ -85,11 +91,18 @@ public class AudioInstance extends AudioEventAdapter {
 	public void playNext(){
 		if(!player.isPaused()){
 			player.stopTrack();
+			remove(0);
 		}
 		if(queue.size() < 1){
 			return;
 		}
 		player.playTrack(queue.get(0));
+	}
+	
+	public void remove(int index){
+		if(queue.size() > index){
+			queue.remove(index);
+		}
 	}
 	
 	public void shuffleQueue(){

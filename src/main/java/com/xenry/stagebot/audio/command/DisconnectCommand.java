@@ -1,6 +1,9 @@
 package com.xenry.stagebot.audio.command;
 import com.xenry.stagebot.audio.AudioHandler;
 import com.xenry.stagebot.audio.AudioInstance;
+import com.xenry.stagebot.audio.IAudioInstance;
+import com.xenry.stagebot.audio.musicquiz.MusicQuizInstance;
+import com.xenry.stagebot.command.CommandHandler;
 import com.xenry.stagebot.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,9 +27,13 @@ public class DisconnectCommand extends AudioCommand {
 	protected void perform(User user, Message message, String[] args, String label) {
 		MessageChannel messageChannel = message.getChannel();
 		Guild guild = message.getGuild();
-		AudioInstance instance = handler.getInstance(message.getGuild());
+		IAudioInstance instance = handler.getInstance(message.getGuild());
 		if(instance == null){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm not connected right now.");
+			return;
+		}
+		if(instance instanceof MusicQuizInstance){
+			MessageUtil.sendMessage(messageChannel, ":x: A music quiz is taking place right now. Use `" + CommandHandler.PREFIX + "end-quiz` to end the quiz.");
 			return;
 		}
 		handler.destroyInstance(guild);

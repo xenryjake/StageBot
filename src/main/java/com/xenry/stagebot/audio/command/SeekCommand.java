@@ -10,8 +10,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.List;
-
 /**
  * StageBot created by Henry Blasingame (Xenry) on 5/19/20
  * The content in this file and all related files are
@@ -19,10 +17,10 @@ import java.util.List;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class QueueCommand extends AudioCommand {
+public class SeekCommand extends AudioCommand {
 	
-	public QueueCommand(AudioHandler audioHandler){
-		super(audioHandler, "queue", "q");
+	public SeekCommand(AudioHandler audioHandler){
+		super(audioHandler, "seek");
 	}
 	
 	@Override
@@ -34,27 +32,37 @@ public class QueueCommand extends AudioCommand {
 			MessageUtil.sendMessage(messageChannel, ":x: I'm not connected right now.");
 			return;
 		}
-		
 		if(!(instance instanceof AudioInstance)){
 			MessageUtil.sendMessage(messageChannel, ":x: You can't use this command right now.");
 			return;
 		}
-		
-		StringBuilder sb = new StringBuilder();
-		List<AudioTrack> tracks = ((AudioInstance)instance).getQueue();
-		int i = 0;
-		for(AudioTrack track : tracks){
-			if(i == 0){
-				sb.append("**Now Playing:** `").append(MessageUtil.stripFormatting(track.getInfo().title)).append("`\n")
-						.append(TimeUtil.getClockFromMilliseconds(track.getPosition())).append("/").append(TimeUtil.getClockFromMilliseconds(track.getDuration())).append("\n\n");
-			}else{
-				sb.append(i).append(". `").append(MessageUtil.stripFormatting(track.getInfo().title)).append("`\n");
-			}
-			if(++i > 10){
-				break; //todo support multiple pages
-			}
+		AudioTrack track = instance.getPlayer().getPlayingTrack();
+		if(track == null){
+			MessageUtil.sendMessage(messageChannel, ":x: There is no track playing right now.");
+			return;
 		}
-		MessageUtil.sendEmbed(messageChannel, "Queue", sb.toString());
+		if(args.length < 1){
+			MessageUtil.sendMessage(messageChannel, ":x: Please specify where to seek to, in seconds.");
+			return;
+		}
+		int seconds;
+		try{
+			seconds = Integer.parseInt(args[0]);
+		}catch(Exception ex){
+			MessageUtil.sendMessage(messageChannel, ":x: Please enter a valid integer.");
+			return;
+		}
+		if(seconds < 0){
+			MessageUtil.sendMessage(messageChannel, ":x: Please enter an integer greater than 0.");
+			return;
+		}
+		if(seconds >= (track.getDuration()/1000)){
+			MessageUtil.sendMessage(messageChannel, ":x: Please enter a number less than the length of the song.");
+			return;
+		}
+		long newPos = ((long)seconds)*1000;
+		track.setPosition(newPos);
+		MessageUtil.sendMessage(messageChannel, ":white_check_mark: Seeking... " + TimeUtil.getClockFromMilliseconds(newPos) + "/" + TimeUtil.getClockFromMilliseconds(track.getDuration()));
 	}
 	
 }

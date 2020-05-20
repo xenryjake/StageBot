@@ -1,6 +1,7 @@
 package com.xenry.stagebot.audio.command;
 import com.xenry.stagebot.audio.AudioHandler;
 import com.xenry.stagebot.audio.AudioInstance;
+import com.xenry.stagebot.audio.IAudioInstance;
 import com.xenry.stagebot.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,9 +25,14 @@ public class PlayCommand extends AudioCommand {
 	protected void perform(User user, Message message, String[] args, String label) {
 		MessageChannel messageChannel = message.getChannel();
 		Guild guild = message.getGuild();
-		AudioInstance instance = handler.getInstance(guild);
+		IAudioInstance instance = handler.getInstance(guild);
 		if(instance == null || !instance.isConnected()){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm not connected right now.");
+			return;
+		}
+		
+		if(!(instance instanceof AudioInstance)){
+			MessageUtil.sendMessage(messageChannel, ":x: You can't use this command right now.");
 			return;
 		}
 		
@@ -45,7 +51,7 @@ public class PlayCommand extends AudioCommand {
 			sb.append(arg).append(" ");
 		}
 		String query = sb.toString().trim();
-		instance.loadTrack(query);
+		((AudioInstance)instance).loadTrack(query);
 	}
 	
 }

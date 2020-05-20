@@ -26,7 +26,7 @@ public final class ShutdownCommand extends Command {
 		}
 		MessageUtil.sendMessage(message.getChannel(), "Shutting down...");
 		System.out.println(user.getAsTag() + " executed bot shutdown from channel: " + message.getChannel().getName());
-		System.exit(0);
+		stageBot.getJDA().shutdown();
 	}
 	
 }
