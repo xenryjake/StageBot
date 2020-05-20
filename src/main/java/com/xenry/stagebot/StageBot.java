@@ -30,7 +30,7 @@ public final class StageBot {
 	}
 	
 	private StageBot() throws Exception {
-		jda = JDABuilder.createDefault(PrivateToken.TOKEN).build();
+		jda = JDABuilder.createDefault(BotToken.TOKEN).build();
 		
 		commandHandler = new CommandHandler(this);
 		jda.addEventListener(commandHandler);
