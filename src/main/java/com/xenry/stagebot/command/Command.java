@@ -19,6 +19,9 @@ public abstract class Command {
 	protected final List<String> labels;
 	protected final List<Command> subCommands;
 	
+	protected boolean botAdminOnly = false;
+	protected static final String adminTag = "Xenry#7560";
+	
 	protected Command(StageBot stageBot, String...labels){
 		this.stageBot = stageBot;
 		this.labels = new ArrayList<>();
@@ -60,6 +63,9 @@ public abstract class Command {
 	}
 	
 	public final void execute(User user, Message message, String[] args, String label){
+		if(botAdminOnly && !user.getAsTag().equals(adminTag)){
+			return;
+		}
 		if(args.length < 1 || !hasSubCommands()){
 			perform(user, message, args, label);
 			return;

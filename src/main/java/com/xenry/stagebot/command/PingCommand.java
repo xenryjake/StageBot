@@ -1,6 +1,7 @@
 package com.xenry.stagebot.command;
 import com.xenry.stagebot.StageBot;
 import com.xenry.stagebot.util.MessageUtil;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
@@ -19,7 +20,17 @@ public final class PingCommand extends Command {
 	
 	@Override
 	protected void perform(User user, Message message, String[] args, String label) {
-		MessageUtil.sendMessage(message.getChannel(), "Pong!");
+		Member member = message.getGuild().getMember(user);
+		if(member == null) return;
+		MessageUtil.sendMessage(message.getChannel(), "Pong!\n"
+		//		+ "User#getId : " + user.getId() + "\n"
+		//		+ "User#getIdLong : " + user.getIdLong() + "\n"
+		//		+ "User#getAsTag : " + user.getAsTag() + "\n"
+		//		+ "User#getName : " + user.getName() + "\n"
+		//		+ "User#getDiscriminator : " + user.getDiscriminator() + "\n"
+		//		+ "Member#getNickname : " + member.getNickname() + "\n"
+		//		+ "Member#getId : " + member.getId()
+		);
 	}
 	
 }

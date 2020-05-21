@@ -1,6 +1,8 @@
-package com.xenry.stagebot.audio.command;
+package com.xenry.stagebot.audio.musicquiz.command;
 import com.xenry.stagebot.audio.AudioHandler;
 import com.xenry.stagebot.audio.IAudioInstance;
+import com.xenry.stagebot.audio.command.AbstractAudioCommand;
+import com.xenry.stagebot.audio.musicquiz.MusicQuizAudioInstance;
 import com.xenry.stagebot.util.MessageUtil;
 import net.dv8tion.jda.api.entities.*;
 
@@ -11,10 +13,11 @@ import net.dv8tion.jda.api.entities.*;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class ConnectCommand extends AbstractAudioCommand {
+@Deprecated
+public class StartQuizCommand extends AbstractAudioCommand {
 	
-	public ConnectCommand(AudioHandler audioHandler){
-		super(audioHandler, "connect", "join", "summon");
+	public StartQuizCommand(AudioHandler handler){
+		super(handler, "start-quiz", "startquiz");
 	}
 	
 	@Override
@@ -37,7 +40,7 @@ public class ConnectCommand extends AbstractAudioCommand {
 		
 		IAudioInstance instance = audioHandler.getInstance(message.getGuild());
 		if(instance == null){
-			instance = audioHandler.createInstance(message.getGuild(), messageChannel, voiceChannel);
+			instance = audioHandler.createQuizInstance(message.getGuild(), messageChannel, voiceChannel);
 		}
 		if(instance.isConnected()){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm already connected to a channel in this guild.");
@@ -47,7 +50,7 @@ public class ConnectCommand extends AbstractAudioCommand {
 			MessageUtil.sendMessage(messageChannel, ":x: I don't have permission to join your voice channel.");
 			return;
 		}
-		MessageUtil.sendMessage(messageChannel, ":white_check_mark: Connected to `" + instance.getVoiceChannel().getName() + "` and bound to `" + instance.getMessageChannel().getName() + "`");
+		((MusicQuizAudioInstance)instance).start();
 	}
 	
 }

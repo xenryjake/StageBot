@@ -5,9 +5,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.xenry.stagebot.audio.AudioHandler;
 import com.xenry.stagebot.audio.AudioPlayerSendHandler;
 import com.xenry.stagebot.audio.IAudioInstance;
+import com.xenry.stagebot.util.MessageUtil;
+import com.xenry.stagebot.util.Perm;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.ArrayList;
@@ -19,34 +21,33 @@ import java.util.ArrayList;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class MusicQuizInstance extends AudioEventAdapter implements IAudioInstance {
+public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioInstance {
 	
 	private final MessageChannel messageChannel;
 	private final VoiceChannel voiceChannel;
-	private final AudioHandler handler;
+	private final AudioHandler audioHandler;
 	private final AudioPlayer player;
 	private final ArrayList<AudioTrack> queue;
 	
-	public MusicQuizInstance(AudioHandler handler, MessageChannel messageChannel, VoiceChannel voiceChannel){
-		this.handler = handler;
+	public MusicQuizAudioInstance(AudioHandler audioHandler, MessageChannel messageChannel, VoiceChannel voiceChannel){
+		this.audioHandler = audioHandler;
 		this.messageChannel = messageChannel;
 		this.voiceChannel = voiceChannel;
 		
 		queue = new ArrayList<>();
 		
-		player = handler.manager.createPlayer();
+		player = audioHandler.manager.createPlayer();
 		player.addListener(this);
 	}
 	
 	@Override
 	public boolean connect() {
-		AudioManager audioManager = voiceChannel.getGuild().getAudioManager();
-		try{
-			audioManager.openAudioConnection(voiceChannel);
-			audioManager.setSendingHandler(new AudioPlayerSendHandler(player));
-		}catch(PermissionException ex){
+		if(!Perm.has(voiceChannel,Permission.VOICE_CONNECT)){
 			return false;
 		}
+		AudioManager audioManager = voiceChannel.getGuild().getAudioManager();
+		audioManager.openAudioConnection(voiceChannel);
+		audioManager.setSendingHandler(new AudioPlayerSendHandler(player));
 		return true;
 	}
 	
@@ -75,6 +76,19 @@ public class MusicQuizInstance extends AudioEventAdapter implements IAudioInstan
 		return player;
 	}
 	
+	public void start(){
+		MessageUtil.sendMessage(messageChannel, ":musical_note: **A music quiz is starting in a moment!**");
+		
+		//todo
+	}
 	
+	public void end(){
+		player.stopTrack();
+		
+		//todo send leaderboard
+		MessageUtil.sendMessage(messageChannel, ":octagonal_sign: Quiz ended.");
+		
+		audioHandler.destroyInstance(voiceChannel.getGuild());
+	}
 	
 }

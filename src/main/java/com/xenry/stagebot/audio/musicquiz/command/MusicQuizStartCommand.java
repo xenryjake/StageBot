@@ -1,20 +1,22 @@
-package com.xenry.stagebot.audio.command;
-import com.xenry.stagebot.audio.AudioHandler;
+package com.xenry.stagebot.audio.musicquiz.command;
 import com.xenry.stagebot.audio.IAudioInstance;
+import com.xenry.stagebot.audio.musicquiz.AbstractMusicQuizCommand;
+import com.xenry.stagebot.audio.musicquiz.MusicQuizAudioInstance;
+import com.xenry.stagebot.audio.musicquiz.MusicQuizHandler;
 import com.xenry.stagebot.util.MessageUtil;
 import net.dv8tion.jda.api.entities.*;
 
 /**
- * StageBot created by Henry Blasingame (Xenry) on 5/19/20
+ * StageBot created by Henry Blasingame (Xenry) on 5/20/20
  * The content in this file and all related files are
  * Copyright (C) 2020 Henry Blasingame.
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class ConnectCommand extends AbstractAudioCommand {
+public class MusicQuizStartCommand extends AbstractMusicQuizCommand {
 	
-	public ConnectCommand(AudioHandler audioHandler){
-		super(audioHandler, "connect", "join", "summon");
+	public MusicQuizStartCommand(MusicQuizHandler musicQuizHandler){
+		super(musicQuizHandler, "start");
 	}
 	
 	@Override
@@ -37,7 +39,7 @@ public class ConnectCommand extends AbstractAudioCommand {
 		
 		IAudioInstance instance = audioHandler.getInstance(message.getGuild());
 		if(instance == null){
-			instance = audioHandler.createInstance(message.getGuild(), messageChannel, voiceChannel);
+			instance = audioHandler.createQuizInstance(message.getGuild(), messageChannel, voiceChannel);
 		}
 		if(instance.isConnected()){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm already connected to a channel in this guild.");
@@ -47,7 +49,7 @@ public class ConnectCommand extends AbstractAudioCommand {
 			MessageUtil.sendMessage(messageChannel, ":x: I don't have permission to join your voice channel.");
 			return;
 		}
-		MessageUtil.sendMessage(messageChannel, ":white_check_mark: Connected to `" + instance.getVoiceChannel().getName() + "` and bound to `" + instance.getMessageChannel().getName() + "`");
+		((MusicQuizAudioInstance)instance).start();
 	}
 	
 }

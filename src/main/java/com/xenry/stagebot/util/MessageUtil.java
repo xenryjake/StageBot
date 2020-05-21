@@ -16,19 +16,8 @@ public final class MessageUtil {
 	
 	private MessageUtil(){}
 	
-	private static boolean has(MessageChannel channel, Permission permission){
-		if(!(channel instanceof TextChannel)){
-			return true;
-		}
-		return has((TextChannel)channel, permission);
-	}
-	
-	private static boolean has(TextChannel channel, Permission permission){
-		return channel.getGuild().getSelfMember().hasPermission(permission);
-	}
-	
 	private static void sendMessage(MessageChannel channel, Message message){
-		if(!has(channel, Permission.MESSAGE_WRITE) || !has(channel, Permission.MESSAGE_READ)){
+		if(!Perm.has(channel, Permission.MESSAGE_WRITE) || !Perm.has(channel, Permission.MESSAGE_READ)){
 			Log.info("No permission to send messages in channel: " + channel.getName());
 			return;
 		}
@@ -40,15 +29,19 @@ public final class MessageUtil {
 	}
 	
 	public static void sendEmbed(MessageChannel channel, MessageEmbed embed){
-		if(!has(channel, Permission.MESSAGE_EMBED_LINKS)){
+		if(!Perm.has(channel, Permission.MESSAGE_EMBED_LINKS)){
 			Log.info("No permission to embed links in channel: " + channel.getName());
 			return;
 		}
 		sendMessage(channel, new MessageBuilder().setEmbed(embed).build());
 	}
 	
+	public static void sendEmbed(MessageChannel channel, String title, String description, String url){
+		sendEmbed(channel, new EmbedBuilder().setTitle(title, url).setDescription(description).build());
+	}
+	
 	public static void sendEmbed(MessageChannel channel, String title, String description){
-		sendEmbed(channel, new EmbedBuilder().setTitle(title, null).setDescription(description).build());
+		sendEmbed(channel, title, null, description);
 	}
 	
 	public static void deleteMessage(Message message){

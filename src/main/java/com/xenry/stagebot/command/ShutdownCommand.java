@@ -13,8 +13,6 @@ import net.dv8tion.jda.api.entities.User;
  */
 public final class ShutdownCommand extends Command {
 	
-	private static final String adminTag = "Xenry#7560";
-	
 	public ShutdownCommand(StageBot stageBot){
 		super(stageBot, "shutdown");
 	}
@@ -26,7 +24,7 @@ public final class ShutdownCommand extends Command {
 		}
 		MessageUtil.sendMessage(message.getChannel(), "Shutting down...");
 		System.out.println(user.getAsTag() + " executed bot shutdown from channel: " + message.getChannel().getName());
-		stageBot.getJDA().shutdown();
+		stageBot.jda.shutdown();
 	}
 	
 }

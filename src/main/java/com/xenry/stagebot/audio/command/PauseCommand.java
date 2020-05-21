@@ -1,8 +1,7 @@
 package com.xenry.stagebot.audio.command;
 import com.xenry.stagebot.audio.AudioHandler;
-import com.xenry.stagebot.audio.AudioInstance;
 import com.xenry.stagebot.audio.IAudioInstance;
-import com.xenry.stagebot.audio.musicquiz.MusicQuizInstance;
+import com.xenry.stagebot.audio.musicquiz.MusicQuizAudioInstance;
 import com.xenry.stagebot.command.CommandHandler;
 import com.xenry.stagebot.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
@@ -17,7 +16,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class PauseCommand extends AudioCommand {
+public class PauseCommand extends AbstractAudioCommand {
 	
 	public PauseCommand(AudioHandler audioHandler){
 		super(audioHandler, "pause");
@@ -27,13 +26,13 @@ public class PauseCommand extends AudioCommand {
 	protected void perform(User user, Message message, String[] args, String label) {
 		MessageChannel messageChannel = message.getChannel();
 		Guild guild = message.getGuild();
-		IAudioInstance instance = handler.getInstance(guild);
+		IAudioInstance instance = audioHandler.getInstance(guild);
 		if(instance == null || !instance.isConnected()){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm not connected right now.");
 			return;
 		}
 		
-		if(instance instanceof MusicQuizInstance){
+		if(instance instanceof MusicQuizAudioInstance){
 			MessageUtil.sendMessage(messageChannel, ":x: A music quiz is taking place right now. Use `" + CommandHandler.PREFIX + "end-quiz` to end the quiz.");
 			return;
 		}

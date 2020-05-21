@@ -8,9 +8,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.xenry.stagebot.util.Log;
 import com.xenry.stagebot.util.MessageUtil;
+import com.xenry.stagebot.util.Perm;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.ArrayList;
@@ -44,14 +45,13 @@ public class AudioInstance extends AudioEventAdapter implements IAudioInstance {
 	}
 	
 	@Override
-	public boolean connect(){
-		AudioManager audioManager = voiceChannel.getGuild().getAudioManager();
-		try{
-			audioManager.openAudioConnection(voiceChannel);
-			audioManager.setSendingHandler(new AudioPlayerSendHandler(player));
-		}catch(PermissionException ex){
+	public boolean connect() {
+		if(!Perm.has(voiceChannel, Permission.VOICE_CONNECT)){
 			return false;
 		}
+		AudioManager audioManager = voiceChannel.getGuild().getAudioManager();
+		audioManager.openAudioConnection(voiceChannel);
+		audioManager.setSendingHandler(new AudioPlayerSendHandler(player));
 		return true;
 	}
 	

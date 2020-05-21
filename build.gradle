@@ -6,6 +6,7 @@ plugins {
 mainClassName = 'com.xenry.stagebot.Bot'
 
 version '1.0'
+def mongoVersion = '3.2.0'
 def jdaVersion = '4.1.1_153'
 def lavaVersion = '1.3.48'
 
@@ -16,6 +17,7 @@ repositories {
 }
 
 dependencies {
+    compile "org.mongodb:mongodb-driver:$mongoVersion"
     compile "net.dv8tion:JDA:$jdaVersion"
     implementation "com.sedmelluq:lavaplayer:$lavaVersion"
 }

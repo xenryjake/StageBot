@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class PlayCommand extends AudioCommand {
+public class PlayCommand extends AbstractAudioCommand {
 	
 	public PlayCommand(AudioHandler handler){
 		super(handler, "play", "add", "p", "a");
@@ -25,7 +25,7 @@ public class PlayCommand extends AudioCommand {
 	protected void perform(User user, Message message, String[] args, String label) {
 		MessageChannel messageChannel = message.getChannel();
 		Guild guild = message.getGuild();
-		IAudioInstance instance = handler.getInstance(guild);
+		IAudioInstance instance = audioHandler.getInstance(guild);
 		if(instance == null || !instance.isConnected()){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm not connected right now.");
 			return;

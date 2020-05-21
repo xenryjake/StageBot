@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class SeekCommand extends AudioCommand {
+public class SeekCommand extends AbstractAudioCommand {
 	
 	public SeekCommand(AudioHandler audioHandler){
 		super(audioHandler, "seek");
@@ -27,7 +27,7 @@ public class SeekCommand extends AudioCommand {
 	protected void perform(User user, Message message, String[] args, String label) {
 		MessageChannel messageChannel = message.getChannel();
 		Guild guild = message.getGuild();
-		IAudioInstance instance = handler.getInstance(guild);
+		IAudioInstance instance = audioHandler.getInstance(guild);
 		if(instance == null || !instance.isConnected()){
 			MessageUtil.sendMessage(messageChannel, ":x: I'm not connected right now.");
 			return;

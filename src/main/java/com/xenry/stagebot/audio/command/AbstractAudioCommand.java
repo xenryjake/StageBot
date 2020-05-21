@@ -9,13 +9,13 @@ import com.xenry.stagebot.command.Command;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public abstract class AudioCommand extends Command {
+public abstract class AbstractAudioCommand extends Command {
 	
-	protected final AudioHandler handler;
+	protected final AudioHandler audioHandler;
 	
-	protected AudioCommand(AudioHandler handler, String...labels){
-		super(handler.stageBot, labels);
-		this.handler = handler;
+	protected AbstractAudioCommand(AudioHandler audioHandler, String...labels){
+		super(audioHandler.stageBot, labels);
+		this.audioHandler = audioHandler;
 	}
 	
 }
