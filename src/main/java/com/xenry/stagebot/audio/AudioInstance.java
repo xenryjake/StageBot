@@ -123,7 +123,6 @@ public class AudioInstance extends AudioEventAdapter implements IAudioInstance {
 		handler.manager.loadItem(identifier, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {
-				Log.info("Track loaded");
 				addToQueue(track);
 				player.startTrack(track, true);
 				MessageUtil.sendMessage(messageChannel, ":white_check_mark: Added `" + track.getInfo().title + "` to the queue.");
@@ -131,7 +130,6 @@ public class AudioInstance extends AudioEventAdapter implements IAudioInstance {
 			
 			@Override
 			public void playlistLoaded(AudioPlaylist playlist) {
-				Log.info("Playlist loaded");
 				if(playlist.getTracks().size() < 1){
 					Log.info("Playlist size is 0?");
 					return;
@@ -153,7 +151,7 @@ public class AudioInstance extends AudioEventAdapter implements IAudioInstance {
 				if(exception.severity == FriendlyException.Severity.COMMON){
 					MessageUtil.sendMessage(messageChannel, ":x: " + exception.getMessage());
 				}else{
-					Log.info("Load failed (severity=" + exception.severity.name() + ")");
+					Log.info("Load failed (severity=" + exception.severity.name() + "): " + exception.getMessage());
 					MessageUtil.sendMessage(messageChannel, ":x: Failed to load.");
 				}
 			}
@@ -162,7 +160,7 @@ public class AudioInstance extends AudioEventAdapter implements IAudioInstance {
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) {
-		Log.info("Player was paused.");
+		// Player was paused
 	}
 	
 	@Override
@@ -198,7 +196,10 @@ public class AudioInstance extends AudioEventAdapter implements IAudioInstance {
 	
 	@Override
 	public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
-		// Audio track has been unable to provide us any audio, might want to just start a new track
+		player.stopTrack();
+		queue.remove(track);
+		playNext();
+		MessageUtil.sendMessage(messageChannel, ":warning: `" + track.getInfo().title + "` got stuck, skipping...");
 	}
 	
 }

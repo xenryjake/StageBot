@@ -1,5 +1,6 @@
-package com.xenry.stagebot.audio.musicquiz;
+package com.xenry.stagebot.audio.musicquiz.command;
 import com.xenry.stagebot.audio.command.AbstractAudioCommand;
+import com.xenry.stagebot.audio.musicquiz.MusicQuizHandler;
 
 /**
  * StageBot created by Henry Blasingame (Xenry) on 5/20/20

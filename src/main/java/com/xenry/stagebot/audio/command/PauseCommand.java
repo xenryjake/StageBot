@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class PauseCommand extends AbstractAudioCommand {
+public final class PauseCommand extends AbstractAudioCommand {
 	
 	public PauseCommand(AudioHandler audioHandler){
 		super(audioHandler, "pause");

@@ -4,9 +4,7 @@ import com.mongodb.DBCollection;
 import com.xenry.stagebot.StageBot;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * StageBot created by Henry Blasingame (Xenry) on 5/20/20

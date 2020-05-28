@@ -19,7 +19,7 @@ import java.util.List;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class QueueCommand extends AbstractAudioCommand {
+public final class QueueCommand extends AbstractAudioCommand {
 	
 	public QueueCommand(AudioHandler audioHandler){
 		super(audioHandler, "queue", "q");

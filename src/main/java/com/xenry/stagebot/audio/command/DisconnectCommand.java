@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class DisconnectCommand extends AbstractAudioCommand {
+public final class DisconnectCommand extends AbstractAudioCommand {
 	
 	public DisconnectCommand(AudioHandler audioHandler){
 		super(audioHandler, "disconnect", "leave");

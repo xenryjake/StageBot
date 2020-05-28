@@ -41,7 +41,7 @@ public final class MessageUtil {
 	}
 	
 	public static void sendEmbed(MessageChannel channel, String title, String description){
-		sendEmbed(channel, title, null, description);
+		sendEmbed(channel, title, description, null);
 	}
 	
 	public static void deleteMessage(Message message){
@@ -60,8 +60,12 @@ public final class MessageUtil {
 				.replace(">", "\u180E>");
 	}
 	
-	public static void react(Message message){
-		//todo
+	public static void react(Message message, String emoji){
+		if(!Perm.has(message.getChannel(), Permission.MESSAGE_ADD_REACTION)){
+			Log.info("No permission to add reaction to message in channel: " + message.getChannel().getName());
+			return;
+		}
+		message.addReaction(emoji).queue();
 	}
 	
 }

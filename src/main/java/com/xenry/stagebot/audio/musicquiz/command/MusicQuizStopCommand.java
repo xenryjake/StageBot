@@ -1,6 +1,5 @@
 package com.xenry.stagebot.audio.musicquiz.command;
 import com.xenry.stagebot.audio.IAudioInstance;
-import com.xenry.stagebot.audio.musicquiz.AbstractMusicQuizCommand;
 import com.xenry.stagebot.audio.musicquiz.MusicQuizAudioInstance;
 import com.xenry.stagebot.audio.musicquiz.MusicQuizHandler;
 import com.xenry.stagebot.command.CommandHandler;

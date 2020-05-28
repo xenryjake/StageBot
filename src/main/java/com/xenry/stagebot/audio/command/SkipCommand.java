@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class SkipCommand extends AbstractAudioCommand {
+public final class SkipCommand extends AbstractAudioCommand {
 	
 	public SkipCommand(AudioHandler audioHandler){
 		super(audioHandler, "skip", "s");
@@ -36,7 +36,7 @@ public class SkipCommand extends AbstractAudioCommand {
 			return;
 		}
 		
-		MessageUtil.sendMessage(messageChannel, ":white_check_mark: Skipping...");
+		MessageUtil.sendMessage(messageChannel, ":track_next: Skipping...");
 		((AudioInstance)instance).playNext();
 	}
 	

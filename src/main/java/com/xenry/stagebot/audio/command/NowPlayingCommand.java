@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.*;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class NowPlayingCommand extends AbstractAudioCommand {
+public final class NowPlayingCommand extends AbstractAudioCommand {
 	
 	public NowPlayingCommand(AudioHandler audioHandler){
 		super(audioHandler, "np", "nowplaying");

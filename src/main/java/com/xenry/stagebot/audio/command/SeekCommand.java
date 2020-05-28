@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class SeekCommand extends AbstractAudioCommand {
+public final class SeekCommand extends AbstractAudioCommand {
 	
 	public SeekCommand(AudioHandler audioHandler){
 		super(audioHandler, "seek");

@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class ShuffleCommand extends AbstractAudioCommand {
+public final class ShuffleCommand extends AbstractAudioCommand {
 	
 	public ShuffleCommand(AudioHandler audioHandler){
 		super(audioHandler, "shuffle");
@@ -37,7 +37,7 @@ public class ShuffleCommand extends AbstractAudioCommand {
 		}
 		
 		((AudioInstance)instance).shuffleQueue();
-		MessageUtil.sendMessage(messageChannel, ":white_check_mark: Shuffled queue.");
+		MessageUtil.sendMessage(messageChannel, ":twisted_rightward_arrows: Shuffled queue.");
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.xenry.stagebot.command;
 import com.xenry.stagebot.StageBot;
 import com.xenry.stagebot.util.MessageUtil;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -31,6 +32,8 @@ public final class PingCommand extends Command {
 		//		+ "Member#getNickname : " + member.getNickname() + "\n"
 		//		+ "Member#getId : " + member.getId()
 		);
+		//MessageUtil.react(message, "✅");
+		//MessageUtil.react(message, "❌");
 	}
 	
 }

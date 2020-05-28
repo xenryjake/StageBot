@@ -4,11 +4,8 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.xenry.stagebot.StageBot;
 import com.xenry.stagebot.audio.command.*;
-import com.xenry.stagebot.audio.musicquiz.MessageListener;
 import com.xenry.stagebot.audio.musicquiz.MusicQuizAudioInstance;
 import com.xenry.stagebot.audio.musicquiz.MusicQuizHandler;
-import com.xenry.stagebot.audio.musicquiz.command.StartQuizCommand;
-import com.xenry.stagebot.audio.musicquiz.command.StopQuizCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -26,14 +23,16 @@ public final class AudioHandler {
 	
 	public final StageBot stageBot;
 	public final AudioPlayerManager manager;
+	public final MusicQuizHandler musicQuizHandler;
 	private final HashMap<Guild,IAudioInstance> instances;
-	private MusicQuizHandler musicQuizHandler;
 	
 	public AudioHandler(StageBot stageBot){
 		this.stageBot = stageBot;
 		instances = new HashMap<>();
 		manager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(manager);
+		
+		musicQuizHandler = new MusicQuizHandler(this);
 		
 		stageBot.getCommandHandler().register(new ConnectCommand(this));
 		stageBot.getCommandHandler().register(new DisconnectCommand(this));
@@ -45,9 +44,6 @@ public final class AudioHandler {
 		stageBot.getCommandHandler().register(new NowPlayingCommand(this));
 		stageBot.getCommandHandler().register(new QueueCommand(this));
 		stageBot.getCommandHandler().register(new SeekCommand(this));
-		
-		stageBot.getCommandHandler().register(new StartQuizCommand(this));
-		stageBot.getCommandHandler().register(new StopQuizCommand(this));
 	}
 	
 	public HashMap<Guild,IAudioInstance> getInstances() {
@@ -71,7 +67,7 @@ public final class AudioHandler {
 		if(instances.containsKey(guild)){
 			throw new IllegalArgumentException("An instance already exists for guild: " + guild.getName());
 		}
-		IAudioInstance instance = new MusicQuizAudioInstance(this, messageChannel, voiceChannel);
+		IAudioInstance instance = new MusicQuizAudioInstance(musicQuizHandler, messageChannel, voiceChannel);
 		instances.put(guild, instance);
 		return instance;
 	}

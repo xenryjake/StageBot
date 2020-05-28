@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.User;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class PlayCommand extends AbstractAudioCommand {
+public final class PlayCommand extends AbstractAudioCommand {
 	
 	public PlayCommand(AudioHandler handler){
 		super(handler, "play", "add", "p", "a");
@@ -39,7 +39,7 @@ public class PlayCommand extends AbstractAudioCommand {
 		if(args.length < 1){
 			if(instance.getPlayer().isPaused()){
 				instance.getPlayer().setPaused(false);
-				MessageUtil.sendMessage(messageChannel, ":white_check_mark: Playing");
+				MessageUtil.sendMessage(messageChannel, ":arrow_forward: Playing");
 			}else{
 				MessageUtil.sendMessage(messageChannel, ":x: The player is not paused.");
 			}
@@ -51,6 +51,10 @@ public class PlayCommand extends AbstractAudioCommand {
 			sb.append(arg).append(" ");
 		}
 		String query = sb.toString().trim();
+		/*if(!query.toLowerCase().contains("youtube.com") && !query.toLowerCase().contains("youtu.be")){
+			MessageUtil.sendMessage(messageChannel, ":x: I currently only support YouTube.");
+			return;
+		}*/
 		((AudioInstance)instance).loadTrack(query);
 	}
 	

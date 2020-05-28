@@ -1,8 +1,9 @@
 package com.xenry.stagebot.audio.musicquiz;
 import com.mongodb.BasicDBObject;
-import org.bson.types.ObjectId;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,14 +15,29 @@ import java.util.List;
  */
 public class MusicQuizSong extends BasicDBObject {
 	
+	public AudioTrack track = null;
+	
+	@Deprecated
 	public MusicQuizSong(){
 		//required for Mongo instantiation
 	}
 	
-	public MusicQuizSong(String url, String title, String...artists){
+	public MusicQuizSong(int songID, String url, String title, String artist, int startMS, String validTitle, List<String> validArtists){
+		this(songID, url, title, artist, startMS, Collections.singletonList(validTitle), validArtists);
+	}
+	
+	public MusicQuizSong(int songID, String url, String title, String artist, int startMS, List<String> validTitles, List<String> validArtists){
+		put("songID", songID);
 		put("url", url);
 		put("title", title);
-		put("artists", Arrays.asList(artists));
+		put("artist", artist);
+		put("startMS", startMS);
+		put("validTitles", validTitles);
+		put("validArtists", validArtists);
+	}
+	
+	public int getSongID(){
+		return getInt("songID");
 	}
 	
 	public String getURL(){
@@ -32,9 +48,22 @@ public class MusicQuizSong extends BasicDBObject {
 		return getString("title");
 	}
 	
+	public String getArtist(){
+		return getString("artist");
+	}
+	
+	public int getStartMS(){
+		return getInt("startMS");
+	}
+	
 	@SuppressWarnings("unchecked")
-	public List<String> getArtists(){
-		return (List<String>)get("artists");
+	public List<String> getValidTitles(){
+		return (List<String>)get("validTitles");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> getValidArtists(){
+		return (List<String>)get("validArtists");
 	}
 	
 }

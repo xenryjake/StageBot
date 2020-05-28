@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.entities.User;
  */
 public class Profile extends BasicDBObject {
 	
+	@Deprecated
 	public Profile(){
 		//required for Mongo instantiation
 	}

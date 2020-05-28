@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.*;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
-public class ConnectCommand extends AbstractAudioCommand {
+public final class ConnectCommand extends AbstractAudioCommand {
 	
 	public ConnectCommand(AudioHandler audioHandler){
 		super(audioHandler, "connect", "join", "summon");

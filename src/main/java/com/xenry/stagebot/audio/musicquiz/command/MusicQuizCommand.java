@@ -1,5 +1,4 @@
 package com.xenry.stagebot.audio.musicquiz.command;
-import com.xenry.stagebot.audio.musicquiz.AbstractMusicQuizCommand;
 import com.xenry.stagebot.audio.musicquiz.MusicQuizHandler;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -18,6 +17,7 @@ public class MusicQuizCommand extends AbstractMusicQuizCommand {
 		addSubCommand(new MusicQuizUpdateCommand(musicQuizHandler));
 		addSubCommand(new MusicQuizStartCommand(musicQuizHandler));
 		addSubCommand(new MusicQuizStopCommand(musicQuizHandler));
+		addSubCommand(new MusicQuizAddSongCommand(musicQuizHandler));
 	}
 	
 	@Override
