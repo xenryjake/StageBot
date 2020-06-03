@@ -23,10 +23,12 @@ public final class RegexUtil {
 	}
 	
 	public static void main(String[] args){
-		String regex = "MARTINGARRI(X|CKS)";
-		String test = "MARTINGARRIX";
+		String regex = "RUDEBO[IY]";
+		String test = "RUDEBOY";
 		System.out.println("REGEX: " + regex);
+		System.out.println("VALID: " + isValidRegex(regex));
 		System.out.println("TEST: " + test);
+		System.out.println("FILT: " + test.replaceAll("(\\[\"|\",\"|\"])", ""));
 		System.out.println("RESULT: " + applyAlphanumericFilter(test.toLowerCase()).matches(regex.toLowerCase()));
 	}
 	
@@ -36,6 +38,10 @@ public final class RegexUtil {
 	
 	public static String applyAlphanumericFilterLowercase(String string){
 		return string.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+	}
+	
+	public static String applyAlphanumericFilterUppercase(String string){
+		return string.replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
 	}
 	
 }

@@ -65,7 +65,11 @@ public final class MessageUtil {
 			Log.info("No permission to add reaction to message in channel: " + message.getChannel().getName());
 			return;
 		}
-		message.addReaction(emoji).queue();
+		try {
+			message.addReaction(emoji).queue();
+		}catch(Exception ex){
+			Log.info("Couldn't react to message");
+		}
 	}
 	
 }

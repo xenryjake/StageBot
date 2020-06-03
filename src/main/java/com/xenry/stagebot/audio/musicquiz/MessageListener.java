@@ -1,5 +1,6 @@
 package com.xenry.stagebot.audio.musicquiz;
 import com.xenry.stagebot.audio.IAudioInstance;
+import com.xenry.stagebot.command.CommandHandler;
 import com.xenry.stagebot.util.Log;
 import com.xenry.stagebot.util.MessageUtil;
 import com.xenry.stagebot.util.RegexUtil;
@@ -7,6 +8,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * StageBot created by Henry Blasingame (Xenry) on 5/20/20
@@ -25,7 +27,7 @@ public final class MessageListener extends ListenerAdapter {
 	
 	@Override
 	public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-		if(event.getAuthor().isBot()){
+		if(event.getAuthor().isBot() || event.getMessage().getContentRaw().startsWith(CommandHandler.PREFIX)){
 			return;
 		}
 		IAudioInstance iInstance = musicQuizHandler.audioHandler.getInstance(event.getGuild());
@@ -40,19 +42,29 @@ public final class MessageListener extends ListenerAdapter {
 		String guess = event.getMessage().getContentRaw();
 		boolean containsTitle = false;
 		if(!instance.isCurrentTitleGuessed()){
-			for(String title : song.getValidTitles()){
-				if(matches(guess, title)){
-					containsTitle = true;
-					break;
+			List<String> validTitles = song.getValidTitles();
+			if(validTitles.isEmpty()){
+				Log.warning("No valid titles for song " + song.getSongID());
+			}else{
+				for(String title : validTitles){
+					if(matches(guess, title)){
+						containsTitle = true;
+						break;
+					}
 				}
 			}
 		}
 		boolean containsArtist = false;
 		if(!instance.isCurrentArtistGuessed()){
-			for(String artist : song.getValidArtists()){
-				if(matches(guess, artist)){
-					containsArtist = true;
-					break;
+			List<String> validArtists = song.getValidArtists();
+			if(validArtists.isEmpty()){
+				Log.warning("No valid artists for song " + song.getSongID());
+			}else{
+				for(String artist : validArtists){
+					if(matches(guess, artist)){
+						containsArtist = true;
+						break;
+					}
 				}
 			}
 		}
@@ -65,25 +77,21 @@ public final class MessageListener extends ListenerAdapter {
 	}
 	
 	private boolean matches(String guess, String answer){
-		answer = answer.replaceAll("/","");
-		guess = RegexUtil.applyAlphanumericFilterLowercase(guess);
-		if(isRegexQuery(answer)){
+		answer = answer.replaceAll("/","").toUpperCase();
+		guess = RegexUtil.applyAlphanumericFilterUppercase(guess);
+		if(RegexUtil.isValidRegex(answer)){
 			return matchesRegex(guess, answer);
 		}else{
-			return guess.contains(RegexUtil.applyAlphanumericFilterLowercase(answer));
+			Log.info("Non-regex query: `" + answer + "`");
+			return guess.contains(RegexUtil.applyAlphanumericFilterUppercase(answer));
 		}
 	}
 	
 	private boolean matchesRegex(String guess, String regex){
 		guess = RegexUtil.applyAlphanumericFilter(guess);
-		regex = regex.toLowerCase().substring(1, regex.length() - 1);
 		boolean result = guess.matches("(?s).*" + regex + ".*");
 		Log.info("checking `" + guess + "` against regex `" + regex + "`: " + result);
 		return result;
-	}
-	
-	private boolean isRegexQuery(String string){
-		return RegexUtil.isValidRegex(string.substring(1, string.length() - 1));
 	}
 	
 }

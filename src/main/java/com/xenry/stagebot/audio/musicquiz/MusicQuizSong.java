@@ -2,7 +2,6 @@ package com.xenry.stagebot.audio.musicquiz;
 import com.mongodb.BasicDBObject;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

@@ -33,13 +33,15 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioInstance, TrackMarkerHandler {
 	
+	public static final boolean TEST_MODE = false;
+	
 	public static final long MS_PER_SONG = 30000;
 	
 	private final MessageChannel messageChannel;
 	private final VoiceChannel voiceChannel;
 	private final MusicQuizHandler musicQuizHandler;
 	private final AudioPlayer player;
-	private final ArrayList<MusicQuizSong> songs;
+	private final List<MusicQuizSong> songs;
 	private final HashMap<User,Integer> scores;
 	
 	private int currentIndex = 0;
@@ -104,23 +106,29 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 		if(count <= 0){
 			throw new IllegalArgumentException("count must be greater than 0");
 		}
-		//List<MusicQuizSong> allSongs = TestSongListGenerator.generateA();
-		List<MusicQuizSong> allSongs = musicQuizHandler.getAllSongs();
-		if(allSongs.size() == 0){
-			MessageUtil.sendMessage(messageChannel, ":warning: Cannot start a music quiz. There are no songs in the database.");
-			musicQuizHandler.audioHandler.destroyInstance(voiceChannel.getGuild());
-			return;
-		}
-		songs.clear();
-		if(count < allSongs.size()){
-			count = allSongs.size();
-		}
-		for(int i = 1; i < count; i++){
-			MusicQuizSong song = selectRandomNoRepeats(allSongs, 0);
-			if(song == null){
-				continue;
+		
+		if(TEST_MODE){
+			songs.clear();
+			songs.addAll(musicQuizHandler.getAllSongs());
+		}else{
+			//List<MusicQuizSong> allSongs = TestSongListGenerator.generateA();
+			List<MusicQuizSong> allSongs = musicQuizHandler.getAllSongs();
+			if(allSongs.size() == 0){
+				MessageUtil.sendMessage(messageChannel, ":warning: Cannot start a music quiz. There are no songs in the database.");
+				musicQuizHandler.audioHandler.destroyInstance(voiceChannel.getGuild());
+				return;
 			}
-			songs.add(song);
+			songs.clear();
+			if(count > allSongs.size()){
+				count = allSongs.size();
+			}
+			for(int i = 0; i < count; i++){
+				MusicQuizSong song = selectRandomNoRepeats(allSongs, 0);
+				if(song == null){
+					continue;
+				}
+				songs.add(song);
+			}
 		}
 		
 		for(MusicQuizSong song : songs){
@@ -207,7 +215,7 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 		MusicQuizSong finishedSong = songs.get(currentIndex);
 		AudioTrack finishedTrack = finishedSong.track;
 		finishedTrack.setMarker(null);
-		MessageUtil.sendMessage(messageChannel, ":musical_note: The song was `" + MessageUtil.stripFormatting(finishedSong.getTitle()) + "` by `" + MessageUtil.stripFormatting(finishedSong.getArtist()) + "`");
+		MessageUtil.sendMessage(messageChannel, ":musical_note: The song was `" + MessageUtil.stripFormatting(finishedSong.getTitle()) + "` by `" + MessageUtil.stripFormatting(finishedSong.getArtist()) + "` (" + (currentIndex+1) + "/" + songs.size() + ")");
 		sendLeaderboard();
 		
 		currentIndex++;
@@ -229,16 +237,19 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 		player.playTrack(newTrack);
 		newTrack.setPosition(song.getStartMS());
 		newTrack.setMarker(new TrackMarker(song.getStartMS() + MS_PER_SONG, this));
+		if(TEST_MODE){
+			MessageUtil.sendMessage(messageChannel, "Title: `" + song.getTitle() + "`\nArtist: `" + song.getArtist() + "`");
+		}
 	}
 	
 	private void next(){
 		if(moveToNext()){
 			play();
-		};
+		}
 	}
 	
 	private void sendLeaderboard(){
-		Map<User,Integer> sortedScores = MapUtil.sortByValue(scores);
+		Map<User,Integer> sortedScores = MapUtil.sortByValueReverse(scores);
 		if(sortedScores.isEmpty()){
 			return;
 		}
@@ -250,19 +261,19 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 			}
 			switch(rank){
 				case 1:
-					sb.append(":first_place:");
+					sb.append(":first_place: ");
 					break;
 				case 2:
-					sb.append(":second_place:");
+					sb.append(":second_place: ");
 					break;
 				case 3:
-					sb.append(":third_place:");
+					sb.append(":third_place: ");
 					break;
 				default:
-					sb.append(rank);
+					sb.append(rank).append(": ");
 					break;
 			}
-			sb.append(": ").append(entry.getKey().getAsMention()).append(" - ").append(entry.getValue()).append(" points");
+			sb.append(entry.getKey().getAsMention()).append(" : ").append(entry.getValue()).append(" points");
 		}
 		
 		MessageUtil.sendEmbed(messageChannel, new EmbedBuilder().setTitle("Leaderboard").setColor(Color.ORANGE).setDescription(sb.toString().trim()).build());

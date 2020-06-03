@@ -18,6 +18,7 @@ public class MusicQuizCommand extends AbstractMusicQuizCommand {
 		addSubCommand(new MusicQuizStartCommand(musicQuizHandler));
 		addSubCommand(new MusicQuizStopCommand(musicQuizHandler));
 		addSubCommand(new MusicQuizAddSongCommand(musicQuizHandler));
+		addSubCommand(new MusicQuizPrintAllCommand(musicQuizHandler));
 	}
 	
 	@Override
