@@ -40,7 +40,7 @@ public final class StringUtil {
 	}
 	
 	public static List<char[]> bigram(String input) {
-		ArrayList<char[]> bigram = new ArrayList<char[]>();
+		ArrayList<char[]> bigram = new ArrayList<>();
 		for (int i = 0; i < input.length() - 1; i++) {
 			char[] chars = new char[2];
 			chars[0] = input.charAt(i);

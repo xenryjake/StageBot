@@ -39,7 +39,7 @@ public final class MusicQuizHandler {
 		if(songs.size() == 0){
 			MusicQuizSong defaultSong = new MusicQuizSong(1, "https://www.youtube.com/watch?v=rp31_j9knMI", "Higher Ground", "Martin Garrix ft. John Martin", 50000, "HIGHERGROUND", Arrays.asList("MARTINGARRI(X|CKS)", "JOHNMARTIN"));
 			songs.add(defaultSong);
-			save(defaultSong);;
+			save(defaultSong);
 		}
 		
 		//check for compatibility and fix if needed

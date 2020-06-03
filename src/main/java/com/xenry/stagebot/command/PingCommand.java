@@ -1,7 +1,6 @@
 package com.xenry.stagebot.command;
 import com.xenry.stagebot.StageBot;
 import com.xenry.stagebot.util.MessageUtil;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
