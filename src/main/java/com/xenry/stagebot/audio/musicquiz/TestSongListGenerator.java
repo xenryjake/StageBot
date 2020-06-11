@@ -10,10 +10,12 @@ import java.util.List;
  * Usage of this content without written consent of Henry Blasingame
  * is prohibited.
  */
+@Deprecated
 public final class TestSongListGenerator {
 	
 	private TestSongListGenerator(){}
 	
+	@Deprecated
 	public static List<MusicQuizSong> generateA(){
 		List<MusicQuizSong> songs = new ArrayList<>();
 		songs.add(new MusicQuizSong(1, "https://www.youtube.com/watch?v=rp31_j9knMI", "Higher Ground", "Martin Garrix ft. John Martin", 50000, "Higher Ground", Arrays.asList("Martin Garrix", "John Martin")));

@@ -45,8 +45,8 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 	private final HashMap<User,Integer> scores;
 	
 	private int currentIndex = 0;
-	private boolean currentTitleGuessed = false;
-	private boolean currentArtistGuessed = false;
+	private User currentTitleGuessedBy = null;
+	private User currentArtistGuessedBy = null;
 	
 	public MusicQuizAudioInstance(MusicQuizHandler musicQuizHandler, MessageChannel messageChannel,VoiceChannel voiceChannel){
 		this.musicQuizHandler = musicQuizHandler;
@@ -226,8 +226,8 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 		}
 		player.stopTrack();
 		
-		currentArtistGuessed = false;
-		currentTitleGuessed = false;
+		currentTitleGuessedBy = null;
+		currentArtistGuessedBy = null;
 		return true;
 	}
 	
@@ -273,7 +273,7 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 					sb.append(rank).append(": ");
 					break;
 			}
-			sb.append(entry.getKey().getAsMention()).append(" : ").append(entry.getValue()).append(" points");
+			sb.append(entry.getKey().getAsMention()).append(" : ").append(entry.getValue()).append(" points\n");
 		}
 		
 		MessageUtil.sendEmbed(messageChannel, new EmbedBuilder().setTitle("Leaderboard").setColor(Color.ORANGE).setDescription(sb.toString().trim()).build());
@@ -299,28 +299,33 @@ public class MusicQuizAudioInstance extends AudioEventAdapter implements IAudioI
 		int scoreMod = 0;
 		if(title) {
 			scoreMod++;
-			currentTitleGuessed = true;
+			currentTitleGuessedBy = user;
 		}
 		if(artist){
 			scoreMod++;
-			currentArtistGuessed = true;
+			currentArtistGuessedBy = user;
 		}
+		
+		if(currentTitleGuessedBy == user && currentArtistGuessedBy == user){
+			scoreMod++;
+		}
+		
 		scores.remove(user);
 		scores.put(user, newScore + scoreMod);
 		
 		MessageUtil.sendMessage(messageChannel, user.getAsMention() + " Correct! **+" + scoreMod + " points**");
 		
-		if(currentTitleGuessed && currentArtistGuessed){
+		if(isCurrentTitleGuessed() && isCurrentArtistGuessed()){
 			next();
 		}
 	}
 	
 	public boolean isCurrentTitleGuessed() {
-		return currentTitleGuessed;
+		return currentTitleGuessedBy != null;
 	}
 	
 	public boolean isCurrentArtistGuessed() {
-		return currentArtistGuessed;
+		return currentArtistGuessedBy != null;
 	}
 	
 }

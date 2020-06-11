@@ -82,7 +82,7 @@ public final class MessageListener extends ListenerAdapter {
 		if(RegexUtil.isValidRegex(answer)){
 			return matchesRegex(guess, answer);
 		}else{
-			Log.info("Non-regex query: `" + answer + "`");
+			Log.info("Non-regex answer: `" + answer + "`");
 			return guess.contains(RegexUtil.applyAlphanumericFilterUppercase(answer));
 		}
 	}
@@ -90,7 +90,7 @@ public final class MessageListener extends ListenerAdapter {
 	private boolean matchesRegex(String guess, String regex){
 		guess = RegexUtil.applyAlphanumericFilter(guess);
 		boolean result = guess.matches("(?s).*" + regex + ".*");
-		Log.info("checking `" + guess + "` against regex `" + regex + "`: " + result);
+		Log.debug("checking `" + guess + "` against regex `" + regex + "`: " + result);
 		return result;
 	}
 	

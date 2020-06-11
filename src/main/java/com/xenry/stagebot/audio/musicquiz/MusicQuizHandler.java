@@ -43,7 +43,7 @@ public final class MusicQuizHandler {
 		}
 		
 		//check for compatibility and fix if needed
-		Log.info("Starting database compatibility check...");
+		Log.info("Starting database compatibility conversion...");
 		for(MusicQuizSong song : songs){
 			boolean modified = false;
 			
@@ -53,7 +53,7 @@ public final class MusicQuizHandler {
 					song.put("songID", Integer.parseInt((String)songIDObject));
 					modified = true;
 				}catch(Exception ex){
-					Log.info("In songID conversion, invalid integer format found.");
+					Log.warning("In songID conversion, invalid integer format found.");
 				}
 			}
 			
@@ -63,7 +63,7 @@ public final class MusicQuizHandler {
 					song.put("startMS", Integer.parseInt((String)startMSObject));
 					modified = true;
 				}catch(Exception ex){
-					Log.info("In startMS conversion, invalid integer format found.");
+					Log.warning("In startMS conversion, invalid integer format found.");
 				}
 			}
 			
@@ -87,7 +87,7 @@ public final class MusicQuizHandler {
 				save(song);
 			}
 		}
-		Log.info("Database compatibility check finished.");
+		Log.info("Database compatibility conversion finished.");
 	}
 	
 	public void download(){

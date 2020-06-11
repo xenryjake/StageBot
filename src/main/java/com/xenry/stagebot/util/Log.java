@@ -10,6 +10,10 @@ public final class Log {
 	
 	private Log() {}
 	
+	public static void debug(String string){
+		System.out.print("[DEBUG] " + string);
+	}
+	
 	public static void info(String string){
 		System.out.println("[INFO] " + string);
 	}
